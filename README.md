@@ -3,4 +3,4 @@ this is the thing to share the project. please put your emails here
 mine is johnathan.harrington@go.tarleton.edu
 
 
-so we could do like a schedule planner, a choose your own adventure game, some sort of calculator, any idea is great, project is due on next monday(the 2nd)
+I put up a terminal based schedule that does one week, I am working on a GUI for it and will look at month by month after the GUI is done
