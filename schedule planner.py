@@ -9,30 +9,30 @@ saturday=[]
 week=[sunday, monday, tuesday, wednesday, thursday, friday, saturday]
 
 
-def add_task(day, time, task):
+def add_task(day, time, task): #adds a task and time as a list to the list for the requested day
     day.append([time, task])
 
-def remove_task(day, time):
+def remove_task(day, time): #removes the list object at the time the user says to remove
    for i in range(len(day)):
        if day[i][0] == time:
             print("Task,", day[i][1], ", removed successfully.")
             del day[i]
-            return True
-       else:
+            return True #terrminates loop
+       else: #error
             print("Task not found.")
-            return False
-def view_schedule():
+            return False #terrminates loop
+def view_schedule(): #prints out the schedule
     print("Your Schedule:")
-    days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] #holds the names of the days
     for i in range(len(week)):
-        print(days[i], ":")
+        print(days[i], ":") 
         if len(week[i])>0:
             for j in range(len(week[i])):
                 print( week[i][j][0], " - ", week[i][j][1])
             
         
 
-while True:
+while True: #main loop
     print("Welcome to the schedule planner!")
     print("1. Add a task")
     print("2. remove a task")
@@ -40,7 +40,7 @@ while True:
     print("4. Exit")
     choice = input("Enter your choice: ").lower()
 
-    if choice == "1":
+    if choice == "1": #calls Add_task()
         day_choice = input("Enter the day (sunday, monday, tuesday, wednesday, thursday, friday, saturday): ").lower()
         time = input("Enter the time (e.g., 14:00): ")
         task = input("Enter the task: ")
@@ -62,7 +62,7 @@ while True:
         else:
             print("Invalid day entered.")
 
-    elif choice == "2":
+    elif choice == "2": #calls remove_task()
         day_choice = input("Enter the day (sunday, monday, tuesday, wednesday, thursday, friday, saturday): ").lower()
         time = input("Enter the time of the task to remove (e.g., 14:00): ")
 
@@ -82,11 +82,11 @@ while True:
             remove_task(saturday, time)
         else:
             print("Invalid day entered.")
-    elif choice == "3" or choice == "view":
+    elif choice == "3" or choice == "view": #calls view_schedule
         view_schedule()
-    elif choice == "4" or choice == "exit" or choice == "Exit" or choice == "quit" or choice == "Quit":
+    elif choice == "4" or choice == "exit" or choice == "Exit" or choice == "quit" or choice == "Quit": #exits the program
         print("Exiting the schedule planner.")
         break
 
-    else:
+    else: #error for invalid choice
         print("Invalid choice. Please try again.")
