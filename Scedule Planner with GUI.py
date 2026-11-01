@@ -5,7 +5,7 @@ from pathlib import Path
 from tkinter import ttk, messagebox
 
 DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday",
-        "Thursday", "Friday", "Saturday"]
+        "Thursday", "Friday", "Saturday"] #a list of days
 SAVE_FILE = Path("schedule.json") #creates a json file to save the schedule data
 
 schedule = {}                                    # "YYYY-MM-DD" -> {day: [[time, task]]}
@@ -14,12 +14,12 @@ cell_times = {}                                  # (row_id, day) -> time
 cell_tasks = {}      # (row_id, day) -> "14:00  full task text"
 
 # ---------------------------------------------------------------- data model
-def week_start(d):
+def week_start(d): #figures out the current week based on the most recent tuesday
     """The Sunday on or before date d."""
     return d - timedelta(days=(d.weekday() + 1) % 7)
 
 
-def current_week():
+def current_week(): #stores the current week to display the propper tasks for the week
     """The displayed week's dict, created on demand."""
     key = state["start"].isoformat()
     if key not in schedule:
@@ -27,11 +27,11 @@ def current_week():
     return schedule[key]
 
 
-def add_task(day, time, task):
+def add_task(day, time, task): #adds a task to a selected day, takes the day, time, and task as input
     current_week()[day].append([time, task])
 
 
-def remove_task(day, time):
+def remove_task(day, time): #removes task at position i based on the time(index 0) value, takes the day the task is in on input along with time
     tasks = current_week()[day]
     for i in range(len(tasks)):
         if tasks[i][0] == time:
@@ -40,7 +40,7 @@ def remove_task(day, time):
     return False
 
 
-def normalize_time(raw):
+def normalize_time(raw): #this function makes sure that the inputed time follows any of the accepted formats
     """Accept 9:00, 0900, 2pm, 14 -> '14:00'. None if unparseable."""
     cleaned = raw.upper().replace(" ", "")
     for fmt in ("%H:%M", "%H%M", "%I:%M%p", "%I%p", "%H"):
@@ -52,7 +52,7 @@ def normalize_time(raw):
 
 
 # ------------------------------------------------------------- save and load
-def save():
+def save():#uses JSON to save the schedule data to a flile so it persists between sesions, it filters out empty tasks
     keep = {k: v for k, v in schedule.items() if any(v[d] for d in DAYS)}
     try:
         SAVE_FILE.write_text(json.dumps(keep, indent=2))
@@ -60,7 +60,7 @@ def save():
         messagebox.showerror("Save failed", str(err))
 
 
-def load():
+def load(): #fnds the persistant file to load the tasks stored in it so long as it exists
     if not SAVE_FILE.exists():
         return
     try:
@@ -78,16 +78,16 @@ def refresh_display():
     end = start + timedelta(days=6)
     is_now = start == week_start(date.today())
     week_label.config(text=f"{start:%b %d} - {end:%b %d, %Y}"
-                           + ("   (this week)" if is_now else ""))
+                           + ("   (this week)" if is_now else "")) #is current week, adds a label that says "this week"
 
     for i, day in enumerate(DAYS):
         d = start + timedelta(days=i)
         marker = " *" if d == date.today() else ""
-        tree.heading(day, text=f"{day[:3]} {d.month}/{d.day}{marker}")
+        tree.heading(day, text=f"{day[:3]} {d.month}/{d.day}{marker}") #adds a * to the current day
 
         tree.delete(*tree.get_children())
     cell_times.clear()
-    cell_tasks.clear()                                  # <-- add
+    cell_tasks.clear()                                  
 
     week = current_week()
     ordered = {day: sorted(week[day]) for day in DAYS}
@@ -108,7 +108,7 @@ def refresh_display():
                 cell_times[(row_id, day)] = time
                 cell_tasks[(row_id, day)] = f"{time}  {task}"      # <-- add
 
-def clear_selection():
+def clear_selection(): #text prompt at the bottom of the window
     state["day"] = state["time"] = None
     status.config(text="Click a task to select it.")
 
