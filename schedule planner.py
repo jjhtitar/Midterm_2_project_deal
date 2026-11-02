@@ -1,4 +1,4 @@
-# Schedule planner
+# terminal based non-persistent concept
 sunday=[]
 monday=[]
 tuesday=[]
